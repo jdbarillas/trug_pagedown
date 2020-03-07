@@ -1,0 +1,24 @@
+{
+  "R": {
+    "Version": "3.6.0",
+    "Repositories": [
+      {
+        "Name": "CRAN",
+        "URL": "http://package-proxy"
+      },
+      {
+        "Name": "RSPM",
+        "URL": "http://cran.rstudio.org"
+      }
+    ]
+  },
+  "Packages": {
+    "renv": {
+      "Package": "renv",
+      "Version": "0.9.3",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "c1a367437d8a8a44bec4b9d4974cb20c"
+    }
+  }
+}
