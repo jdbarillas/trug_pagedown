@@ -1,0 +1,30 @@
+.inverse {
+  background-image: url('resources/media/air_background.jpg');
+  background-size: cover;
+}
+
+img[src*="#smaller"]{
+  height: 200px;
+}
+
+img[src*="#fit"]{
+  height: 400px;
+}
+
+.left-column {
+  padding-top: 15px;
+}
+
+.left-column.no-padding{
+  padding-top: 0;
+}
+
+img[src*="#smallest"] {
+  height: 100px;
+  max-width: 250px;
+}
+
+img[src*="#fit-more"] {
+  height: 335px;
+  width: 450px;
+}

@@ -1,0 +1,98 @@
+---
+title: "GDPR Fines Tracker & Statistics"
+author:  |
+    [![Logo](https://mk0privacyaffaidetc8.kinstacdn.com/wp-content/uploads/2019/10/PrivacyAffairs-Logo-SVG.svg)](https://www.privacyaffairs.com/)
+date: "Report Date: `r Sys.Date()`"
+output:
+  pagedown::html_paged:
+    toc: false
+    css: ["resources/css/custom-fonts.css", "resources/css/custom-page.css", "resources/css/custom.css"]
+    # change to true for a self-contained document, but it'll be a litte slower for Pandoc to render
+    self_contained: false
+    .test: true
+params:
+  country: 
+    label: "Country" 
+    value: Austria
+    input: select
+    choices: [All, Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, France, Germany, Greece, Hungary, Iceland, Italy, Latvia, Lithuania, Malta, Netherlands, Norway, Poland, Portugal, Romania, Slovakia, Spain, Sweden, United Kingdom]
+subtitle: '`r ifelse(params$country != "All", params$country, "")`'
+# uncomment this line to produce HTML and PDF in RStudio:
+#knit: pagedown::chrome_print
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(glue)
+knitr::opts_chunk$set(echo = FALSE)
+
+gdpr_violations <- readr::read_tsv('data/gdpr_violations.tsv')
+gdpr_text <- readr::read_tsv('data/gdpr_text.tsv')
+
+source("R/utils.R")
+
+```
+
+```{css}
+a[href^="http"]:not([class="uri"])::after {
+  content: "";
+}
+```
+
+# {-}
+
+<!-- https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html -->
+::::: {.dashboard__wrapper}
+:::: {.dashboard__wrapper--left}
+
+::: {.head}
+Total Number of GDPR Fines
+:::
+::: {.number}
+250
+:::
+
+::: {.head}
+Largest Fine
+:::
+::: {.number}
+€50,000,000
+:::
+::: {.subhead}
+<span>Google Inc.</span> on January 21 , 2019 - France 
+::: 
+
+
+::::
+:::: {.dashboard__wrapper--right}
+
+::: {.head}
+Total Amount of GDPR Fines
+:::
+::: {.number}
+€153,303,495
+:::
+
+::: {.head}
+Smallest Fine
+:::
+::: {.number}
+€90
+:::
+::: {.subhead}
+<span>Hospital</span> on November 18 , 2019 - Hungary
+:::
+
+::::
+:::::
+
+# Full list of all GDPR fines {-}
+
+```{r, results='asis', echo = FALSE}
+
+rmarkdown_text = create_text_filtered(gdpr_violations, params$country)
+
+cat(rmarkdown_text, sep = '\n\n')
+```

@@ -1,0 +1,144 @@
+---
+title: "GDPR Fines Tracker & Statistics"
+author:  |
+    [![Logo](https://mk0privacyaffaidetc8.kinstacdn.com/wp-content/uploads/2019/10/PrivacyAffairs-Logo-SVG.svg)](https://www.privacyaffairs.com/)
+date: "Report Date: `r Sys.Date()`"
+output:
+  pagedown::html_paged:
+    toc: false
+    css: ["resources/css/custom-fonts.css", "resources/css/custom-page.css", "resources/css/custom.css"]
+    # change to true for a self-contained document, but it'll be a litte slower for Pandoc to render
+    self_contained: false
+    .test: true
+params:
+  country: 
+    label: "Country" 
+    value: All
+    input: select
+    choices: [All, Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, France, Germany, Greece, Hungary, Iceland, Italy, Latvia, Lithuania, Malta, Netherlands, Norway, Poland, Portugal, Romania, Slovakia, Spain, Sweden, United Kingdom]
+subtitle: '`r ifelse(params$country != "All", params$country, "All Countries")`'
+# uncomment this line to produce HTML and PDF in RStudio:
+#knit: pagedown::chrome_print
+output_dir: "site/"
+output_file: "index.html"
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(glue)
+knitr::opts_chunk$set(echo = FALSE)
+
+gdpr_violations <- readr::read_tsv('data/gdpr_violations.tsv')
+gdpr_text <- readr::read_tsv('data/gdpr_text.tsv')
+
+source("R/utils.R")
+
+filtered_data <- create_df_filtered(gdpr_violations, params$country)
+
+n_fines = nrow(filtered_data)
+largest_fine = max(filtered_data$price)
+largest_fine_controller = filtered_data$controller[filtered_data$price == largest_fine]
+largest_fine_date = filtered_data$as_date[filtered_data$price == largest_fine]
+largest_fine_country = filtered_data$name[filtered_data$price == largest_fine]
+
+total_of_fines = sum(filtered_data$price)
+
+smallest_fine = min(filtered_data$price[filtered_data$price > 0])
+smallest_fine_controller = filtered_data$controller[filtered_data$price == smallest_fine]
+smallest_fine_date = filtered_data$as_date[filtered_data$price == smallest_fine]
+smallest_fine_country = filtered_data$name[filtered_data$price == smallest_fine]
+
+recent_5 = top_n(filtered_data, 5, as_date) %>% select(date, controller, price) %>% mutate(price = pretty_num(price))
+top_5 = arrange(top_n(filtered_data, 5, price), desc(price)) %>% select(picture, controller, price) %>% mutate(price = pretty_num(price), picture = sprintf("![](%s)", picture))
+```
+
+```{css}
+a[href^="http"]:not([class="uri"])::after {
+  content: "";
+}
+```
+
+# {-}
+
+<!-- https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html -->
+::::: {.dashboard__wrapper}
+:::: {.dashboard__wrapper--left}
+
+::: {.head}
+Total Number of GDPR Fines
+:::
+::: {.number}
+`r n_fines`
+:::
+
+::: {.head}
+Largest Fine
+:::
+::: {.number}
+`r pretty_num(largest_fine)`
+:::
+::: {.subhead}
+<span>`r largest_fine_controller`</span> on `r pretty_date(largest_fine_date)` - `r largest_fine_country`
+::: 
+
+::::
+:::: {.dashboard__wrapper--right}
+
+::: {.head}
+Total Amount of GDPR Fines
+:::
+::: {.number}
+`r pretty_num(total_of_fines)`
+:::
+
+::: {.head}
+Smallest Fine
+:::
+::: {.number}
+`r pretty_num(smallest_fine)`
+:::
+::: {.subhead}
+<span>`r smallest_fine_controller`</span> on `r pretty_date(smallest_fine_date)` - `r smallest_fine_country`
+:::
+
+::::
+:::::
+
+::::: {.stats__wrapper}
+:::: {.stats__wrapper--left}
+
+::: {.head}
+5 Most Recent GDPR Fines
+:::
+::: {.subhead}
+*Only includes finalized cases
+:::
+::: {.data-recent}
+`r knitr::kable(recent_5)` 
+:::
+::::
+
+:::: {.stats__wrapper--right}
+::: {.head}
+Top 5 Biggest GDPR Fines
+:::
+::: {.subhead}
+*Only includes final & binding fines
+:::
+::: {.data-fines}
+`r knitr::kable(top_5, col.names = NULL, align = "llr")`
+:::
+::::
+
+:::::
+
+# Full list of all GDPR fines {-}
+
+```{r, results='asis', echo = FALSE}
+
+rmarkdown_text = create_text_filtered(gdpr_violations, params$country)
+
+cat(rmarkdown_text, sep = '\n\n')
+```

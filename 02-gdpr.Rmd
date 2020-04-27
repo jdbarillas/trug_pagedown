@@ -1,0 +1,42 @@
+---
+title: "GDPR Fines Tracker & Statistics"
+author: "PRIVACYAffairs"
+date: "`r Sys.Date()`"
+output:
+  pagedown::html_paged:
+    toc: true
+    # change to true for a self-contained document, but it'll be a litte slower for Pandoc to render
+    self_contained: false
+    .test: true
+# uncomment this line to produce HTML and PDF in RStudio:
+#knit: pagedown::chrome_print
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(glue)
+knitr::opts_chunk$set(echo = FALSE)
+
+gdpr_violations <- readr::read_tsv('data/gdpr_violations.tsv')
+gdpr_text <- readr::read_tsv('data/gdpr_text.tsv')
+
+source("R/utils.R")
+
+```
+
+```{css}
+a[href^="http"]:not([class="uri"])::after {
+  content: "";
+}
+```
+
+# Full list of all GDPR fines
+
+```{r, results='asis', echo = FALSE}
+
+rmarkdown_text = create_text(gdpr_violations)
+
+cat(rmarkdown_text, sep = '\n\n')
+```

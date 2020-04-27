@@ -1,0 +1,26 @@
+@font-face {
+  font-family: space-grotesk;
+  src: url(../fonts/SpaceGrotesk-Regular.woff);
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: space-grotesk;
+  src: url(../fonts/SpaceGrotesk-Bold.woff);
+  font-weight: bold;
+}
+
+body {
+  font-family: 'space-grotesk';
+  font-size: 18px;
+  color: var(--primary_color);
+}
+blockquote {
+  font-family: 'space-grotesk';
+}
+code {
+  font-family: 'space-grotesk';
+}
+pre, code {
+  font-size: .95em;
+}
