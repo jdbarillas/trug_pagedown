@@ -7,18 +7,17 @@ subtitle: |
   Embrace HTML and CSS with `r fontawesome::fa(name = "r-project", height= "54pt", fill = "#165caa")` and R Markdown
 author: |
     [Joshua D. Barillas]{style="font-lighter:bold;font-size:1em"} \
-    [Manager, Data Analysis - AACSB International]{style="font-weight:lighter;font-size:1em"}\
-    2020-04-26 \
+    [Manager, Data Analysis - AACSB International]{style="font-weight:lighter;font-size:1em;color:var(--inverse-header-color)"}\
     \
-    [`r fontawesome::fa(name = "linkedin", height= "36pt", fill = "#41717a")`](https://www.linkedin.com/in/jdbarillas/)
-    [`r fontawesome::fa(name = "github-square", height= "36pt", fill = "#41717a")`](https://github.com/jdbarillas)
-    [`r fontawesome::fa(name = "twitter-square", height= "36pt", fill = "#41717a")`](https://twitter.com/jdbarillas)
+    [`r fontawesome::fa(name = "linkedin", height= "36pt", fill = "#337ab7")`](https://www.linkedin.com/in/jdbarillas/)
+    [`r fontawesome::fa(name = "github-square", height= "36pt", fill = "#337ab7")`](https://github.com/jdbarillas)
+    [`r fontawesome::fa(name = "twitter-square", height= "36pt", fill = "#337ab7")`](https://twitter.com/jdbarillas)
 institute: Tampa R Users Group
 direction: false
 lang: "en"
 output:
   xaringan::moon_reader:
-    css: ["default", "resources/css/custom-slides.css", "resources/css/custom-fonts.css"]
+    css: ["default", "xaringan-themer.css", "resources/css/custom-slides.css", "resources/css/custom-fonts.css"]
     nature: 
       ratio: 16:9
       highlightStyle: github
@@ -31,8 +30,23 @@ output_file: "index.html"
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.showtext = FALSE)
 library(ggplot2)
+library(xaringanthemer)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+style_xaringan(
+  background_color = "#272822", 
+  header_color = "#ffffff",
+  text_color = "var(--text-color)",
+  text_bold_color = "#A5A5A5",
+  inverse_background_color = "#EDF4F6",
+  inverse_header_color = "#333",
+  inverse_text_color = "var(--inverse-header-color)",
+  link_color = "var(--secondary_color)", 
+  code_inline_color = "var(--text-bold-color)"
+)
 ```
 
 # Benefits and Limitations of $\LaTeX$ in the use of document publishing
@@ -161,6 +175,25 @@ A polyfill is code that implements a feature on web browsers that do not support
 In development, so expect bugs, workarounds, and exciting possibilities
 
 ---
+layout: false
+class: middle
+
+# How does Paged.js work?
+
+## The Chunker: fragment the content
+
+## The Polisher: polyfill the print declarations
+
+## The Previewer: render the paginated document
+
+???
+the chunker fragments the content into discrete pages;
+the polisher transforms the CSS declarations into ones that the browser can understand;
+and the previewer creates the preview of your book in the browser.
+
+---
+layout:true
+---
 
 # Paged Documents with HTML & CSS
 
@@ -281,35 +314,286 @@ class: inverse, middle, center
 
 # RStudio Cloud Project
 
-https://rstudio.cloud/project/1019060
+## https://rstudio.cloud/project/1019060
 
 ---
+layout: false
+class: inverse, middle, center
 
+# What does a Paged Document look like?
+
+### Open **01-paged_layout.Rmd**  
+### Knit Document
+
+---
 layout: true
 
 ---
-count: false
+background-image: url(resources/media/paged_layout.JPG)
+background-size: contain
+---
+layout: false
+class: inverse, middle, center
+
+# How does a Paged Document look like that?
+
+### Go back to **01-paged_layout.Rmd**  
+### Un-comment lines 10-11 (highlight and press CTRL/CMD+SHIFT+C)
+### Knit Document
+
+---
+layout: true
+---
+background-image: url(resources/media/paged_layout_boxes.JPG)
+background-size: contain
+---
+layout: false
+class: inverse, middle, center
+
+# How can I create my own document?
+
+### Open **02-gdpr.Rmd**  
+### Knit Document
+
+---
+layout: true
+---
+background-image: url(resources/media/gdpr.JPG)
+background-size: contain
+---
+layout: false
+class: inverse, middle, center
+
+# How can I create my own document with parameters?
+
+### Open **03-gdpr_parameter.Rmd**  
+### Knit Document
+## What's different?
+
+---
+layout: true
+---
+background-image: url(resources/media/gdpr_parameter.JPG)
+background-size: contain
+---
+
+# Parameterized Rmd Documents
+
+####  See https://rmarkdown.rstudio.com/developer_parameterized_reports.html%23parameter_types%2F#overview
+
+Declare parameters in YAML header
+
+```yaml
+---
+title: My Document
+output: html_document
+params:
+  region:
+    value: east
+---
+```
+
+Parameters are made available within the knit environment as components of a read-only list named `params`.
+
+Running the following would return what value?
+
+```r
+params$region
+```
+
+???
+This form with a sub-key is useful when you need to provide additional details about the parameter (e.g. information about how parameters should be presented to end-users)
+---
+layout: false
+class: inverse, middle, center
+
+# How can I create my own customized document?
+
+### Open **04-gdpr_parameter_custom.Rmd**  
+### Knit Document
+## What's different?
+
+---
+layout: true
+---
+background-image: url(resources/media/gdpr_parameter_custom.JPG)
+background-size: contain
+---
+
+# Developing a custom pagedown template
+
+Following the template from [@RLesur](https://twitter.com/RLesur) found at https://github.com/rstudio/pagedown/pull/81
+
+#### 1. Create a copy of the default CSS files:
+
+```{r, eval=FALSE, echo=TRUE}
+files <- c("default-fonts", "default-page", "default")
+from <- pagedown:::pkg_resource(paste0("css/", files, ".css"))
+to <- c("custom-fonts.css", "custom-page.css", "custom.css")
+file.copy(from = from, to = to)
+```
+
+#### 2. Modify the fonts
+
+The first step is to modify the `custom-fonts.css` file. Either use freely available CDN-hosted fonts (e.g. Google Fonts, Adobe Egde Web Fonts, etc.) or upload your own and define it (example in `resources/css/custom-fonts.css`).
+
+```css
+@font-face {
+  font-family: space-grotesk;
+  src: url(../fonts/SpaceGrotesk-Regular.woff);
+  font-weight: 300;
+}
+```
+---
+
+# Developing a custom pagedown template (continued)
+
+#### 3. Choose the paper size
+
+Open the `custom-page.css` file. The first CSS rule you can see is:
+
+```css
+@page {
+  size: 6in 9in;
+}
+```
+
+For instance, if you prefer a US Letter-size paper, write:
+
+```css
+@page {
+  size: 8.5in 11in;
+}
+```
+---
+
+# Developing a custom pagedown template (continued)
+
+#### 4. Adjust the CSS viewer parameters
+
+Now, open the `custom.css` file. The first lines you see are CSS variables declarations:
+
+```css
+:root {
+  --background: whitesmoke;
+  --width: 6in;
+  --height: 9in;
+  --color-paper: white;
+  --color-mbox: rgba(0, 0, 0, 0.2);
+  --running-title-width: 2.5in;
+  --screen-pages-spacing: 5mm;
+}
+```
+
+Modify the `--width` and `--height` values to match what you've defined in Step 3.
+
+???
+RStudio does not recognize these declarations and raises false warnings in the margin of the editor.
+
+You can also modify the background color of the viewer with the `--background` variable (for further customization of the viewer, see the media queries declarations at the very end of the `custom.css` file.).
+---
+
+# Using Custom Blocks
+
+Custom blocks allow you to to convert `Div` blocks to both HTML and LaTeX.
+
+Taken from https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html
+
+All attributes of the block will become attributes of the `<div>` tag. For example, a Div can have an ID (after #), one or multiple classes (class names are written after .), and other attributes. The following Div block
+
+```md
+::: {#hello .greeting .message width="40%"}
+Hello **world**!
+:::
+```
+
+will be converted to the HTML code below:
+
+```html
+<div id="hello" class="greeting message" width="40%">
+  Hello <strong>world</strong>!
+</div>
+```
+???
+You need more colons for a parent block to include a child block. 
+---
+
+First, we need to set out CSS classes in `custom.css`
+
+```css
+.dashboard__wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border: 2px solid #dedee2;
+    padding: 20px;
+}
+```
+
+Then use custom blocks 
+
+```md
+::::: {.dashboard__wrapper}
+:::: {.dashboard__wrapper--left}
+
+::::
+:::::
+```
+
+which, when Knit,  will be translated to
+
+```html
+<div class="dashboard__wrapper">
+  <div class="dashboard__wrapper--left">
+  </div>
+</div>
+```
+---
+layout: false
+class: inverse, middle, center
+
+# Now what?
+
+### Open **05-gdpr_final.Rmd**  
+### Knit Document
+
+---
+layout: true
+---
+background-image: url(resources/media/gdpr_final.JPG)
+background-size: contain
+---
+layout: false
+class: inverse, middle, center
+
+# Static HTML
+
+### Can host on platforms such as Netlify 
+**(use `rmarkdown::render`) and make sure all resources are found in folder**
+### Look at `css` files within `resources` for examples
+### Look at **05-gdpr_final.Rmd** to see how custom blocks are used
+### Look `utils.R` in `R` folder to see how text is created
+---
+layout: true
+---
+
 # Acknowledgements
 
 .pull-left[
 * [Xaringan](https://slides.yihui.name/xaringan/#1) package (used to create these slides)
-  + Yihui Xie [`r fontawesome::fa(name = "github-square", height= "24pt", fill = "#41717a")`](https://github.com/yihui)
-    [`r fontawesome::fa(name = "twitter-square", height= "24pt", fill = "#41717a")`](https://twitter.com/xieyihui)
+  + Yihui Xie [`r fontawesome::fa(name = "github-square", height= "24pt", fill = "#337ab7")`](https://github.com/yihui)
+    [`r fontawesome::fa(name = "twitter-square", height= "24pt", fill = "#337ab7")`](https://twitter.com/xieyihui)
 
 * [Pagedown](https://pagedown.rbind.io/) package
-  + Yihui Xie [`r fontawesome::fa(name = "github-square", height= "24pt", fill = "#41717a")`](https://github.com/yihui)
-    [`r fontawesome::fa(name = "twitter-square", height= "24pt", fill = "#41717a")`](https://twitter.com/jdbarillas)
-  + Romain Lesur [`r fontawesome::fa(name = "github-square", height= "24pt", fill = "#41717a")`](https://github.com/RLesur)
-    [`r fontawesome::fa(name = "twitter-square", height= "24pt", fill = "#41717a")`](https://twitter.com/RLesur)
+  + Yihui Xie [`r fontawesome::fa(name = "github-square", height= "24pt", fill = "#337ab7")`](https://github.com/yihui)
+    [`r fontawesome::fa(name = "twitter-square", height= "24pt", fill = "#337ab7")`](https://twitter.com/jdbarillas)
+  + Romain Lesur [`r fontawesome::fa(name = "github-square", height= "24pt", fill = "#337ab7")`](https://github.com/RLesur)
+    [`r fontawesome::fa(name = "twitter-square", height= "24pt", fill = "#337ab7")`](https://twitter.com/RLesur)
   
-* [xaringanthemer](https://www.garrickadenbuie.com/project/xaringanthemer/) Garrick Aden-Buie [`r fontawesome::fa(name = "github-square", height= "24pt", fill = "#41717a")`](https://github.com/gadenbuie/)
-    [`r fontawesome::fa(name = "twitter-square", height= "24pt", fill = "#41717a")`](https://twitter.com/grrrck)
+* [xaringanthemer](https://www.garrickadenbuie.com/project/xaringanthemer/) Garrick Aden-Buie [`r fontawesome::fa(name = "github-square", height= "24pt", fill = "#337ab7")`](https://github.com/gadenbuie/)
+    [`r fontawesome::fa(name = "twitter-square", height= "24pt", fill = "#337ab7")`](https://twitter.com/grrrck)
     
-* [Paged.js](https://www.pagedjs.org/) team: 
-  + Adam Hyde
-  + Julie Blanc
-  + Fred Chasen
-  + Julien Taquet
+* [Paged.js](https://www.pagedjs.org/) team
 ]
 
 .pull-right[
@@ -319,5 +603,11 @@ count: false
 
 ![](https://www.garrickadenbuie.com/images/project/xaringanthemer/examples.gif#smallest)
 
-![](https://www.pagedmedia.org/wp-content/uploads/2018/12/pagedjs-logo.png#smallest)
+![](resources/media/pagedjs.png#smallest)
 ]
+
+---
+layout: false
+class: inverse, middle, center
+
+# Q&A

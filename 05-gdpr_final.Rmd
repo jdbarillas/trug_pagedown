@@ -19,7 +19,7 @@ params:
 subtitle: '`r ifelse(params$country != "All", params$country, "All Countries")`'
 # uncomment this line to produce HTML and PDF in RStudio:
 #knit: pagedown::chrome_print
-output_dir: "site/"
+output_dir: "docs/"
 output_file: "index.html"
 ---
 

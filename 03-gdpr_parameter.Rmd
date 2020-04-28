@@ -11,10 +11,10 @@ output:
 params:
   country: 
     label: "Country"
-    value: All
+    value: Austria
     input: select
     choices: [All, Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, France, Germany, Greece, Hungary, Iceland, Italy, Latvia, Lithuania, Malta, Netherlands, Norway, Poland, Portugal, Romania, Slovakia, Spain, Sweden, United Kingdom]
-subtitle: '`r ifelse(params$country != "All", params$country, "")`'
+subtitle: '`r ifelse(params$country != "All", params$country, "All Countries")`'
 # uncomment this line to produce HTML and PDF in RStudio:
 #knit: pagedown::chrome_print
 ---

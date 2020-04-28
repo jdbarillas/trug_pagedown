@@ -1,6 +1,13 @@
-.inverse {
-  background-image: url('resources/media/air_background.jpg');
-  background-size: cover;
+:root {
+  --background: whitesmoke;
+  --pagedjs-width: A4;
+  --pagedjs-height: A4;
+  --color-paper: white;
+  --color-mbox: rgba(0, 0, 0, 0.2);
+  --running-title-width: 2.5in;
+  --screen-pages-spacing: 5mm;
+  --primary_color: #404040;
+  --secondary_color: #ED5259;
 }
 
 img[src*="#smaller"]{
@@ -27,4 +34,12 @@ img[src*="#smallest"] {
 img[src*="#fit-more"] {
   height: 335px;
   width: 450px;
+}
+
+body .remark-slide-content {
+  color: #ffffff;
+}
+
+.inverse {
+  text-shadow: none;
 }
