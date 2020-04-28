@@ -13,7 +13,7 @@ output:
 params:
   country: 
     label: "Country" 
-    value: All
+    value: Poland
     input: select
     choices: [All, Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, France, Germany, Greece, Hungary, Iceland, Italy, Latvia, Lithuania, Malta, Netherlands, Norway, Poland, Portugal, Romania, Slovakia, Spain, Sweden, United Kingdom]
 subtitle: '`r ifelse(params$country != "All", params$country, "All Countries")`'
