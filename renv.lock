@@ -548,6 +548,13 @@
       "Repository": "RSPM",
       "Hash": "a5262efc867fc3fcf7d08716ab346379"
     },
+    "whisker": {
+      "Package": "whisker",
+      "Version": "0.4",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "ca970b96d894e90397ed20637a0c1bbe"
+    },
     "withr": {
       "Package": "withr",
       "Version": "2.2.0",
@@ -561,6 +568,18 @@
       "Source": "Repository",
       "Repository": "RSPM",
       "Hash": "7168ed8f41f3597c6c570477c0d0bf15"
+    },
+    "xaringanthemer": {
+      "Package": "xaringanthemer",
+      "Version": "0.2.0.9100",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "gadenbuie",
+      "RemoteRepo": "xaringanthemer",
+      "RemoteRef": "master",
+      "RemoteSha": "86233be77f5c53df020a41ff1b8b69f1c61da81b",
+      "Hash": "fde4dae2b556840dc9077b22ca9cd1b5"
     },
     "xfun": {
       "Package": "xfun",
